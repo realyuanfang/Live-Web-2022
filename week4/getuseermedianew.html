@@ -1,0 +1,133 @@
+<html>
+<head>
+    <title>SAY YEAH</title>
+    <link rel=""stylesheet" href="css/style.scc">
+    <script>
+        let width = 500;
+        let height = 0;
+        let filter = 'none';
+        let streaming = false;
+        window.addEventListener('load',function() {
+        // The video element on the page to display the webcam
+            let video = document.getElementById('thevideo');
+            let canvas = document.getElementById('canvas');
+            let photos = document.getElementById('photos');
+            let photoButton = document.getElementById('photo-button');
+            let clearButton = document.getElementById('clear-button');
+            let photoFilter = document.getElementById('photo-filter');
+
+            // Constraints - what do we want?
+            let constraints = { audio: false, video: true }
+
+            // Prompt the user for permission, get the stream
+            navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+                /* Use the stream */
+                
+                // Attach to our video object
+                video.srcObject = stream;
+                
+                // Wait for the stream to load enough to play
+                video.onloadedmetadata = function(e) {
+                    video.play();
+                };
+            })
+            .catch(function(err) {
+                /* Handle the error */
+                alert(err);  
+            });
+
+            video.addEventListener('canplay', function(e) {
+                if(!streaming) {
+                    height = video.videoHeight / (video.videoWidth / width);
+                    video.setAttribute('width', width);
+                    video.setAttribute('height', height);
+                   canvas.setAttribute('width', width);
+                    canvas.setAttribute('height', height);
+
+                    streaming = true; 
+                }
+            }, false)
+
+            photoButton.addEventListener('click', function(e){
+                takePicture();
+
+                e.preventDefault();
+            }, false);
+
+            // filter
+            photoFilter.addEventListener('change'), function(e){
+            filter = e.target.value;
+            video.style.filter = filter;
+            e.preventDefault();
+            }
+
+            //Clear event
+            clearButton.addEventListener('click', function(e) {
+                // clear photos
+                photos.innerHTML ='';
+                // change filter to normal 
+                filter ='none'
+                video.style.filter = filter;
+                photoFilter.selectedIndex = 0; 
+
+            });
+
+            // take picture
+            function takePicture() {
+                const context = canvas.getContext('2d');
+                if(width && height){
+
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    context.drawImage(video, 0,0,width,height);
+
+                    // Create image from the canvas
+                    const imgUrl = canvas.toDataURL('image/png');
+
+                    // create img url
+                    const img = document.createElement('img');
+
+                    // set ig src
+                    img.setAttribute('src', imgUrl);
+                
+                    // set image filter 
+                    img.style.filter = filter; 
+
+                    // add img to photos
+                    photos.appendChild(img);
+
+
+                }
+            }
+        });
+        
+        </script>
+
+
+</head>
+<body>
+    <div class="navbar">
+        <h1>SAY HI</h1>
+    </div>
+    <video id="thevideo"></video>
+    <button id="photo-button" class="btn btn-dark">
+        Take Photo
+    </button>
+    <select id="photo-filter" class="select">
+        <option value="none">Normal</option>
+        <option value="grayscale(100%)">Grayscale</option>
+        <option value="sepia(100%)">Sepia</option>
+        <option value="invert(100%)">Invert</option>
+        <option value="hue-rotate(90deg)">Hue</option>
+        <option value="blur(10px)">Blur</option>
+        <option value="contrast(200%)">Contrast</option>
+    </select>
+        <button id = "clear-button" class="btn btn-light">Clear</button>
+        <canvas id="canvas"></canvas>
+<div class="bottom-container">
+    <div id="photos"></div>
+</div>
+</body>
+
+</html>
