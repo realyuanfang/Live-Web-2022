@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Tug of War</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:300&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #56bc8a;
+      color: white;
+    }
+
+    main {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      bottom: 8vw;
+    }
+
+    .line {
+      height: 16vw;
+      background-color: white;;
+      padding: 1px;
+      margin: 8vw;
+    }
+
+    #rope {
+      background-color: white;
+      padding: 20px;
+      display: block;
+      width: 10vw;
+      margin: 16vw;
+      left: 0;
+      position: relative;
+      border-radius: 10px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    #replay{
+      display: none;
+      margin: auto;
+      background-color: transparent;
+      border: white 1px solid;
+      border-radius: 10px;
+      padding: 1vw 4vw;;
+    }
+
+    #replay:hover{
+      color: #56bc8a;
+      background-color: white;
+    }
+
+
+  </style>
+</head>
+<body>
+  <h1> Tug of War</h1>
+  <button onclick="replay()" id="replay">Play again?</button> 
+  <main>
+      <div>
+          <p>Player 1, spam L to get the block over here!</p>
+          <p id="otherwins"> </p>
+      </div>
+    <div id="lh-line" class="line">
+      
+    </div>
+    <div id="rope">
+    <img src="m1.png">
+    </div>
+    <div id="rh-line" class="line">
+    </div>
+    <div>
+        <p>Player 2, spam A to get the block over here!</p>
+        <p id="spacewins"> </p> 
+    </div>
+   </main>
+
+</body>
+<script>
+    let input = ''
+  document.addEventListener("keydown", dealWithKeyboard, false);
+  let leftness = 0; 
+  let winCounterSpace = 0;
+  let winCounterOther = 0;
+  function dealWithKeyboard(input){
+    let rope = document.getElementById("rope");
+    let replay = document.getElementById("replay");
+    if (input.keyCode === 65){
+      leftness = leftness + 10;
+      rope.style.left = leftness + "px";
+      console.log(rope.offsetLeft)
+    } else {
+      leftness = leftness - 10;
+      rope.style.left = leftness + "px";
+      console.log(rope.offsetLeft)
+    }
+    if (rope.offsetLeft > 0.705 * window.innerWidth){ 
+      alert("Player 2 wins!")
+      replay.style.display = "block";
+      winCounterSpace = winCounterSpace + 1;
+      document.getElementById("spacewins").innerHTML =`<strong> Player 2 wins: </strong> ${winCounterSpace}`
+
+    } else if (rope.offsetLeft < 0.215 * window.innerWidth){
+      alert("Player 1 wins!")
+      replay.style.display = "block";
+      winCounterOther = winCounterOther + 1;
+      document.getElementById("otherwins").innerHTML =`<strong> Player 1 wins: </strong> ${winCounterOther}`
+    }
+
+  }
+  document.getElementById("spacewins").innerHTML =`<strong>Player 2 wins: </strong> ${winCounterSpace}`
+  document.getElementById("otherwins").innerHTML =`<strong>Player 1 wins: </strong> ${winCounterOther}`
+  function replay(){
+    document.getElementById("rope").style.left = 0;
+    leftness = 0;
+  }
+
+</script>
+</html>

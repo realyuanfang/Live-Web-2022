@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flirting Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            bottom: 8vw;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .line {
+            height: 16vw;
+            padding: 1px;
+            margin: 8vw;
+        }
+
+        #man {
+            display: block;
+            width: 30vw;
+            top: 10vh;
+            left: 0;
+            position: relative;
+        }
+
+        #player1 {
+            position: relative;
+            width: 30vw;
+            top: 15vh;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #player2 {
+            position: relative;
+            width: 30vw;
+            top: 15vh;
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 {
+            position: relative;
+            text-align: center;
+            top: 10vh;
+        }
+
+        p {
+            position: relative;
+            top: 10vh;
+        }
+
+        #replay {
+            position: relative;
+            top: 100px;
+            display: none;
+            margin: auto;
+            background-color: transparent;
+            border: white 1px solid;
+            border-radius: 10px;
+            padding: 1vw 4vw;
+            ;
+        }
+
+        #replay:hover {
+            color: #f5631f;
+            background-color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Attract the people you like!</h1>
+    <button onclick="replay()" id="replay">Play again?</button>
+    <main>
+        <div id="player1">
+            <img src="w1.png">
+            <p>Player 1, Press A</p>
+            <p id="otherwins"> </p>
+
+        </div>
+
+        <div id="lh-line" class="line">
+        </div>
+
+        <div id="man">
+            <img src="m1.png">
+        </div>
+
+        <div id="rh-line" class="line">
+        </div>
+
+        <div id="player2">
+            <img src="w2.png">
+            <p>Player 2, Press D</p>
+            <p id="spacewins"> </p>
+        </div>
+
+    </main>
+
+</body>
+<script src="simplepeer.min.js"></script>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+
+    let simplepeers = [];
+    var socket;
+    var mystream;
+    window.addEventListener('load', function () {
+
+        // This kicks it off
+        initCapture();
+
+    });
+
+
+    let input = ''
+    document.addEventListener("keydown", dealWithKeyboard, false);
+
+    let leftness = 0;
+    let winCounterSpace = 0;
+    let winCounterOther = 0;
+    let man = document.getElementById("man");
+    let replay = document.getElementById("replay");
+
+    socket.on('otherevent', dealWithKeyboard);
+
+    function dealWithKeyboard(input) {
+
+        if (input.keyCode === 68) {
+            leftness = leftness + 10;
+            man.style.left = leftness + "px";
+            console.log(man.offsetLeft)
+        }
+        if (input.keyCode === 65) {
+            leftness = leftness - 10;
+            man.style.left = leftness + "px";
+            console.log(man.offsetLeft)
+        }
+        if (man.offsetLeft > 0.60 * window.innerWidth) {
+            alert("Player 2 wins!")
+            replay.style.display = "block";
+            winCounterSpace = winCounterSpace + 1;
+            document.getElementById("spacewins").innerHTML = `<strong> Player 2 wins: </strong> ${winCounterSpace}`
+
+        }
+        if (man.offsetLeft < 0.215 * window.innerWidth) {
+            alert("Player 1 wins!")
+            replay.style.display = "block";
+            winCounterOther = winCounterOther + 1;
+            document.getElementById("otherwins").innerHTML = `<strong> Player 1 wins: </strong> ${winCounterOther}`
+        }
+
+    }
+    document.getElementById("spacewins").innerHTML = `<strong>Player 2 wins: </strong> ${winCounterSpace}`
+    document.getElementById("otherwins").innerHTML = `<strong>Player 1 wins: </strong> ${winCounterOther}`
+
+    function replayAgain() {
+        document.getElementById("man").style.left = 0;
+        leftness = 0;
+    }
+
+    function initCapture() {
+        console.log("initCapture");
+
+        // The video element on the page to display the webcam
+        let video = document.getElementById('myvideo');
+
+        // Constraints - what do we want?
+        let constraints = { audio: true, video: true }
+
+        // Prompt the user for permission, get the stream
+        navigator.mediaDevices.getUserMedia(constraints).then(function (stream) {
+            /* Use the stream */
+
+            // Global object
+            mystream = stream;
+
+            // Attach to our video object
+            video.srcObject = stream;
+
+            // Wait for the stream to load enough to play
+            video.onloadedmetadata = function (e) {
+                video.play();
+            };
+
+            // Now setup socket
+            setupSocket();
+        })
+            .catch(function (err) {
+                /* Handle the error */
+                alert(err);
+            });
+    }
+    function setupSocket() {
+        socket = io.connect();
+
+        socket.on('connect', function () {
+            console.log("Socket Connected");
+            console.log("My socket id: ", socket.id);
+
+            // Tell the server we want a list of the other users
+            socket.emit('list');
+        });
+
+        socket.on('disconnect', function (data) {
+            console.log("Socket disconnected");
+        });
+
+        socket.on('peer_disconnect', function (data) {
+            console.log("simplepeer has disconnected " + data);
+            for (let i = 0; i < simplepeers.length; i++) {
+                if (simplepeers[i].socket_id == data) {
+                    console.log("Removing simplepeer: " + i);
+                    simplepeers.splice(i, 1);
+                    // Should also remove video from page
+                    document.getElementById(data).remove();
+                }
+            }
+        });
+        // Receive listresults from server
+        socket.on('listresults', function (data) {
+            console.log(data);
+            for (let i = 0; i < data.length; i++) {
+                // Make sure it's not us
+                if (data[i] != socket.id) {
+
+                    // create a new simplepeer and we'll be the "initiator"			
+                    let simplepeer = new SimplePeerWrapper(
+                        true, data[i], socket, mystream
+                    );
+
+                    // Push into our array
+                    simplepeers.push(simplepeer);
+                }
+            }
+        });
+        socket.on('signal', function (to, from, data) {
+
+            console.log("Got a signal from the server: ", to, from, data);
+
+            // to should be us
+            if (to != socket.id) {
+                console.log("Socket IDs don't match");
+            }
+
+            // Look for the right simplepeer in our array
+            let found = false;
+            for (let i = 0; i < simplepeers.length; i++) {
+
+                if (simplepeers[i].socket_id == from) {
+                    console.log("Found right object");
+                    // Give that simplepeer the signal
+                    simplepeers[i].inputsignal(data);
+                    found = true;
+                    break;
+                }
+
+            }
+            if (!found) {
+                console.log("Never found right simplepeer object");
+                // Let's create it then, we won't be the "initiator"
+                let simplepeer = new SimplePeerWrapper(
+                    false, from, socket, mystream
+                );
+
+                // Push into our array
+                simplepeers.push(simplepeer);
+
+                // Tell the new simplepeer that signal
+                simplepeer.inputsignal(data);
+            }
+        });
+
+    }
+
+    class SimplePeerWrapper {
+
+        constructor(initiator, socket_id, socket, stream) {
+            this.simplepeer = new SimplePeer({
+                initiator: initiator,
+                trickle: false
+            });
+
+            // Their socket id, our unique id for them
+            this.socket_id = socket_id;
+
+            // Socket.io Socket
+            this.socket = socket;
+
+            // Our video stream - need getters and setters for this
+            this.stream = stream;
+
+            // simplepeer generates signals which need to be sent across socket
+            this.simplepeer.on('signal', data => {
+                this.socket.emit('signal', this.socket_id, this.socket.id, data);
+            });
+
+            // When we have a connection, send our stream
+            this.simplepeer.on('connect', () => {
+                console.log('CONNECT')
+                console.log(this.simplepeer);
+                //p.send('whatever' + Math.random())
+
+                // Let's give them our stream
+                this.simplepeer.addStream(stream);
+                console.log("Send our stream");
+            });
+
+            // Stream coming in to us
+            this.simplepeer.on('stream', stream => {
+                console.log('Incoming Stream');
+
+                // This should really be a callback
+                // Create a video object
+                let ovideo = document.createElement("VIDEO");
+                ovideo.id = this.socket_id;
+                ovideo.srcObject = stream;
+                ovideo.muted = true;
+                ovideo.onloadedmetadata = function (e) {
+                    ovideo.play();
+                };
+                document.body.appendChild(ovideo);
+                console.log(ovideo);
+            });
+
+            this.simplepeer.on('close', () => {
+                console.log('Got close event');
+                // Should probably remove from the array of simplepeers
+            });
+
+            this.simplepeer.on('error', (err) => {
+                console.log(err);
+            });
+        }
+
+        inputsignal(sig) {
+            this.simplepeer.signal(sig);
+        }
+
+    }
+
+
+</script>
+
+</html>

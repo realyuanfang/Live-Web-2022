@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Flirting Game</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300&display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+
+    <style>
+        * {
+            font-family: 'Pixelate', sans-serif;
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+        }
+
+        @font-face {
+            font-family: Pixelate;
+            src: url(SF_Pixelate.ttf);
+        }
+
+        body {
+            font-family: 'Pixelate', sans-serif;
+            width: 1500px;
+            justify-content: center;
+            text-align: center;
+            align-items: center;
+            height: 800px;
+            /* background: linear-gradient(to bottom, #8c7a7a 0%, #af877c 65%, #af877c 100%) fixed; */
+        }
+
+        #changeScreen {
+            /* background: transparent; */
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            /* background: #b4b4b4; */
+            overflow: hidden;
+        }
+
+        /* .pixelCon {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 5%;
+            left: 5%;
+            transform: translate(0%, 0%);
+            overflow: hidden;
+            z-index: -1000;
+        }
+
+        .pixel {
+            background: white;
+            width: 5%;
+            height: 5%;
+
+            top: 5%;
+            left: 5%;
+            padding-top: 5%;
+            float: left;
+            opacity: 0.0;
+            animation: blink 5s infinite;
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 0.5;
+            }
+
+            25% {
+                opacity: 0.0;
+            }
+
+            50% {
+                opacity: 0.0;
+            }
+
+            100% {
+                opacity: 0.0;
+            }
+        } */
+
+        .slide-container {
+            margin: auto;
+            position: absolute;
+            width: 30vw;
+            text-align: center;
+            left: 35vw;
+        }
+
+        .wrapper {
+            padding-top: 100px;
+            padding-bottom: 40px;
+            background-color: transparent;
+        }
+
+        .wrapper:focus {
+            outline: 0;
+        }
+
+        .clash-card {
+            background: rgb(147, 255, 201);
+            width: 300px;
+            height: 500px;
+            display: inline-block;
+            margin: auto;
+            /* border-radius: 19px; */
+            position: relative;
+            text-align: center;
+            justify-content: center;
+            justify-items: center;
+        }
+
+        .clash-card__image--m1 {
+            background: url('m1.png');
+        }
+
+        .clash-card__image--m1 img {
+            width: 400px;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        .clash-card__image--w1 {
+            background: url('w1.png');
+        }
+
+        .clash-card__image--w1 img {
+            width: 400px;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        .clash-card__image--m2 {
+            background: url('m2.png');
+        }
+
+        .clash-card__image--m2 img {
+            width: 400px;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        .clash-card__image--w2 {
+            background: url('w2.png');
+        }
+
+        .clash-card__image--w2 img {
+            width: 400px;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        .clash-card__image--w3 {
+            background: url('w3.png');
+        }
+
+        .clash-card__image--w3 img {
+            width: 400px;
+            position: absolute;
+            top: 40px;
+            left: 0px;
+        }
+
+        .clash-card__level {
+            text-transform: uppercase;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 3px;
+            justify-items: center;
+        }
+
+        .clash-card__level--m1 {
+            color: #ec9b3b;
+            justify-content: center;
+        }
+
+        .clash-card__level--w1 {
+            color: #ee5487;
+        }
+
+        .clash-card__level--m2 {
+            color: #f6901a;
+        }
+
+        .clash-card__level--w2 {
+            color: #82bb30;
+        }
+
+        .clash-card__level--w3 {
+            color: #4facff;
+        }
+
+        .clash-card__unit-name {
+            background: transparent;
+            font-size: 20px;
+            color: rgb(0, 0, 0);
+            text-align: center;
+            margin-bottom: 5px;
+            margin-top: 460px;
+        }
+
+        .clash-card__unit-description {
+            padding: 20px;
+            margin-bottom: 10px;
+        }
+
+        .clash-card__unit-stats--m1 {
+            background: #ec9b3b;
+        }
+
+        .clash-card__unit-stats--m1 .one-third {
+            border-right: 1px solid #bd7c2f;
+        }
+
+        .clash-card__unit-stats--w1 {
+            background: #ee5487;
+        }
+
+        .clash-card__unit-stats--w1 .one-third {
+            border-right: 1px solid #d04976;
+        }
+
+        .clash-card__unit-stats--m2 {
+            background: #f6901a;
+        }
+
+        .clash-card__unit-stats--m2 .one-third {
+            border-right: 1px solid #de7b09;
+        }
+
+        .clash-card__unit-stats--w2 {
+            background: #82bb30;
+        }
+
+        .clash-card__unit-stats--w2 .one-third {
+            border-right: 1px solid #71a32a;
+        }
+
+        .clash-card__unit-stats--w3 {
+            background: #4facff;
+        }
+
+        .clash-card__unit-stats--w3 .one-third {
+            border-right: 1px solid #309eff;
+        }
+
+        .clash-card__unit-stats {
+            color: white;
+            font-weight: 700;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 14px;
+        }
+
+        .clash-card__unit-stats .one-third {
+            width: 33%;
+            float: left;
+            padding: 20px 15px;
+        }
+
+        .clash-card__unit-stats sup {
+            position: absolute;
+            bottom: 4px;
+            font-size: 45%;
+            margin-left: 2px;
+        }
+
+        .clash-card__unit-stats .stat {
+            position: relative;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .clash-card__unit-stats .stat-value {
+            text-transform: uppercase;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .clash-card__unit-stats .no-border {
+            border-right: none;
+        }
+
+        .clearfix:after {
+            visibility: hidden;
+            display: block;
+            font-size: 0;
+            content: " ";
+            clear: both;
+            height: 0;
+        }
+
+        .left {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            max-width: 50px;
+            color: black;
+            left: 20vw;
+            background-color: black;
+        }
+
+        .right {
+            position: absolute;
+            top: 50%;
+            width: auto;
+            right: 20vw;
+            color: white;
+            font-weight: bold;
+            max-width: 50px;
+            /* transition: 0.6 ease; */
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            color: rgb(0, 0, 0);
+            background-color: black;
+        }
+
+        #startBtn {
+            font-size: 30px;
+            color: white;
+            background-color: black;
+            border-color: black;
+            border-width: 3px;
+            padding: 10px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+        }
+
+        #startBtn:hover {
+            color: #f5631f;
+            background-color: rgb(0, 0, 0);
+        }
+
+        #startBtn::before {
+            content: "";
+            display: block;
+            position: absolute;
+            background-color: rgb(0, 0, 0);
+            top: 10px;
+            bottom: 10px;
+            left: -10px;
+            right: -10px;
+            z-index: -1;
+        }
+
+        #startBtn::after {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 4px;
+            bottom: 4px;
+            left: -6px;
+            right: -6px;
+            background-color: rgb(0, 0, 0);
+            z-index: -1;
+        }
+
+        #gameScreen {
+            display: none;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            bottom: 8vw;
+        }
+
+        img {
+            max-width: 100%;
+            background: transparent;
+        }
+
+        .line {
+            height: 16vw;
+            padding: 1px;
+            margin: 8vw;
+        }
+
+        #man {
+            display: block;
+            background: transparent;
+            width: 50vw;
+            top: 10vh;
+            left: 0;
+            position: relative;
+        }
+
+        #player1 {
+            position: relative;
+            background: transparent;
+            width: 40vw;
+            top: 15vh;
+            justify-content: center;
+            text-align: center;
+        }
+
+        #player2 {
+            position: relative;
+            background: transparent;
+            width: 40vw;
+            top: 15vh;
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 {
+            position: relative;
+            text-align: center;
+            top: 15vh;
+        }
+
+        p {
+            position: relative;
+            top: 10vh;
+        }
+
+        #replay {
+            position: relative;
+            top: 100px;
+            display: none;
+            margin: auto;
+            background-color: transparent;
+            border: rgb(255, 0, 0) 1px solid;
+            border-radius: 10px;
+            border-width: 2px;
+            padding: 1vw 4vw;
+
+        }
+
+        #replay:hover {
+            color: #f5631f;
+            background-color: white;
+        }
+
+        #heartSmall_l {
+            position: absolute;
+            top: 25vh;
+            width: 20vw;
+            left: 8vw;
+            background: transparent;
+        }
+
+        #heartMid_l {
+            position: absolute;
+            top: 25vh;
+            width: 20vw;
+            left: 10vw;
+            background: transparent;
+        }
+
+        #heartBig_l {
+            position: absolute;
+            top: 24vh;
+            width: 20vw;
+            left: 18vw;
+            background: transparent;
+        }
+
+        #heartSmall_r {
+            position: absolute;
+            top: 25vh;
+            width: 20vw;
+            right: 10vw;
+            background: transparent;
+        }
+
+        #heartMid_r {
+            position: absolute;
+            top: 25vh;
+            width: 20vw;
+            right: 20vw;
+            background: transparent;
+        }
+
+        #heartBig_r {
+            position: absolute;
+            top: 24vh;
+            width: 20vw;
+            right: 28vw;
+            background: transparent;
+        }
+
+        #otherwins {
+            font-size: 20px;
+
+
+        }
+
+        #spacewins {
+            font-size: 20px;
+        }
+
+        .tag1 {
+            background-color: rgb(255, 92, 92);
+        }
+
+        .tag2 {
+            background-color: rgb(255, 251, 0);
+        }
+
+        #connect {
+            background-color: black;
+            color: white;
+            font-size: 20px;
+            padding: 4px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="changeScreen">
+        <!-- <div class="sidePanel">
+            <div class="pixelCon">
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+                <div class="pixel"></div>
+            </div>
+        </div> -->
+        <div class="slide-container">
+            <div class="wrapper">
+                <div class="clash-card m1">
+                    <div class="clash-card__image clash-card__image--m1">
+                        <img src="m1.png" alt="m1">
+                    </div>
+                    <div class="clash-card__unit-name">Character A</div>
+                </div>
+            </div>
+
+            <!--W1-->
+            <div class="wrapper">
+                <div class="clash-card w1">
+                    <div class="clash-card__image clash-card__image--w1">
+                        <img src="w1.png">
+                    </div>
+                    <div class="clash-card__unit-name">Character B</div>
+                </div>
+            </div>
+
+            <!--M2-->
+
+            <div class="wrapper">
+                <div class="clash-card m2">
+                    <div class="clash-card__mage clash-card__image--m2">
+                        <img src="m2.png">
+                    </div>
+                    <div class="clash-card__unit-name">Character C</div>
+                </div>
+            </div>
+
+
+            <!--w2-->
+            <div class="wrapper">
+                <div class="clash-card w2">
+                    <div class="clash-card__image clash-card__image--w2">
+                        <img src="w2.png">
+                    </div>
+                    <div class="clash-card__unit-name">Character D</div>
+                </div>
+            </div>
+
+
+            <!--w3-->
+            <div class="wrapper">
+                <div class="clash-card w3">
+                    <div class="clash-card__image clash-card__image--w3">
+                        <img src="w3.png">
+                    </div>
+                    <div class="clash-card__unit-name">Character E</div>
+                </div>
+            </div>
+
+            <button id="startBtn">start game</button>
+
+
+
+
+        </div>
+
+        <a class="left" onclick="nextSlide(-1)"><img src="narrow to left.png" style="width: 80px; "></a>
+        <a class="right" onclick="nextSlide(1)"><img src="narrow to right.png" style="width: 80px; "></a>
+
+    </div>
+    <div id="gameScreen">
+        <h1>PRESS! PRESS! PRESS!</h1>
+        <input type="button" id="connect" value="connect">
+        <div id="device">no device yet</div>
+        <div id="data">no data yet</div>
+        <div id="data2">no data yet</div>
+
+        <button onclick="replay()" id="replay">Play again?</button>
+        <!-- <input id = "replay" type="button" value="replay" onclick="sendreplay();"> -->
+
+        <main>
+            <div id="player1">
+                <img id="firstPlayer" src="w1.png" style="background:transparent;">
+                <p class="tag1">Press A</p>
+                <p id="otherwins"> </p>
+            </div>
+            <div id="heartSmall_l">
+                <img src="small.png" style="background:transparent;">
+            </div>
+            <div id="heartMid_l">
+                <img src="medium.png" style="background:transparent;">
+            </div>
+            <div id="heartBig_l">
+                <img src="arduino 3.png" style="background:transparent;">
+            </div>
+
+            <div id="lh-line" class="line">
+            </div>
+
+            <div id="man">
+                <img src="shawn.png" style="background:transparent;">
+            </div>
+
+            <div id="rh-line" class="line">
+            </div>
+
+            <div id="player2">
+                <img src="m2.png" style="background:transparent;">
+                <p class="tag2">Press D</p>
+                <p id="spacewins"> </p>
+            </div>
+            <div id="heartSmall_r">
+                <img src="small.png" style="background:transparent;">
+            </div>
+            <div id="heartMid_r">
+                <img src="medium.png" style="background:transparent;">
+            </div>
+            <div id="heartBig_r">
+                <img src="arduino 3.png" style="background:transparent;">
+            </div>
+
+            <div id="count"></div>
+
+        </main>
+    </div>
+</body>
+<script type="text/javascript" src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+
+    var socket = io.connect();
+
+    socket.on('connect', function () {
+        console.log("Connected");
+    });
+
+    socket.on('otherevent', keyFromServer);
+    socket.on('replaysend', replay);
+    socket.on('startGameSend', startGame);
+
+    socket.on('player1graphics', data => {
+        if (data < 17) {
+            document.getElementById("heartSmall_l").style.opacity = "0";
+            document.getElementById("heartMid_l").style.opacity = "0";
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (data == 17) {
+            document.getElementById("heartSmall_l").style.opacity = "1";
+        } else if (data < 34) {
+            document.getElementById("heartMid_l").style.opacity = "0";
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (data == 34) {
+            document.getElementById("heartMid_l").style.opacity = "1";
+        } else if (data < 51) {
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (data == 51) {
+            document.getElementById("heartBig_l").style.opacity = "1";
+        }
+    });
+
+    socket.on('player2graphics', data => {
+        console.log(data);
+        if (data < 17) {
+            document.getElementById("heartSmall_r").style.opacity = "0";
+            document.getElementById("heartMid_r").style.opacity = "0";
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (data == 17) {
+            document.getElementById("heartSmall_r").style.opacity = "1";
+        } else if (data < 34) {
+            document.getElementById("heartMid_r").style.opacity = "0";
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (data == 34) {
+            document.getElementById("heartMid_r").style.opacity = "1";
+        } else if (data < 51) {
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (data == 51) {
+            document.getElementById("heartBig_r").style.opacity = "1";
+        }
+    });
+
+    $('#startBtn').click(function () {
+        document.getElementById("changeScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        // console.log(slide_index);
+        if (slide_index == 1) {
+            document.getElementById("firstPlayer").src = "m1.png";
+        } else if (slide_index == 2) {
+            document.getElementById("firstPlayer").src = "w1.png";
+        } else if (slide_index == 3) {
+            document.getElementById("firstPlayer").src = "m2.png";
+        } else if (slide_index == 4) {
+            document.getElementById("firstPlayer").src = "w2.png";
+        } else if (slide_index == 5) {
+            document.getElementById("firstPlayer").src = "w3.png";
+        }
+        socket.emit('startGameSend', "click");
+    });
+
+    $('#replay').click(function () {
+        socket.emit('replaysend', "click");
+    });
+
+    let input = ''
+    let total = 0;
+
+    const serviceUuid = '19b10010-e8f2-537e-4f6c-d104768a1214';
+    let connectButton;
+    let dataDiv;
+    let dataDiv2;
+    let deviceDiv;
+    let myDevice;
+
+    document.addEventListener("keydown", dealWithKeyboard, false);
+    const el = document.querySelector("#count");
+
+    let leftness = 0;
+    let winCounterSpace = 0;
+    let winCounterOther = 0;
+
+    function startGame() {
+        document.getElementById("changeScreen").style.display = "none";
+        document.getElementById("gameScreen").style.display = "block";
+        if (slide_index == 1) {
+            document.getElementById("firstPlayer").src = "m1.png";
+        } else if (slide_index == 2) {
+            document.getElementById("firstPlayer").src = "w1.png";
+        } else if (slide_index == 3) {
+            document.getElementById("firstPlayer").src = "m2.png";
+        } else if (slide_index == 4) {
+            document.getElementById("firstPlayer").src = "w2.png";
+        } else if (slide_index == 5) {
+            document.getElementById("firstPlayer").src = "w3.png";
+        }
+    }
+
+    function setup() {
+        connectButton = document.getElementById('connect');
+        connectButton.addEventListener('click', connectToBle);
+        deviceDiv = document.getElementById('device');
+        dataDiv = document.getElementById('data');
+        dataDiv2 = document.getElementById('data2');
+    }
+
+    function connectToBle() {
+        let options = {
+            filters: [{
+                services: [serviceUuid]
+            }]
+        };
+        navigator.bluetooth.requestDevice(options)
+            .then(device => {
+                myDevice = device;
+                deviceDiv.innerHTML = "Device name: " + device.name;
+                deviceDiv.innerHTML += "<br>Service UUID: " + serviceUuid;
+                return device.gatt.connect();
+            })
+            .then(server => server.getPrimaryService(serviceUuid))
+            .then(service => service.getCharacteristics())
+            .then(characteristics => readCharacteristics(characteristics))
+            .catch(error => console.log('Connection failed!', error));
+
+        function readCharacteristics(characteristics) {
+            console.log(characteristics[0].readValue());
+            console.log(characteristics[1].readValue());
+            // deviceDiv.innerHTML += "<br>characteristic UUID: " + characteristics[0].uuid;
+            // deviceDiv.innerHTML += "<br>characteristic UUID: " + characteristics[1].uuid;
+
+            characteristics[0].addEventListener('characteristicvaluechanged', readData);
+            characteristics[1].addEventListener('characteristicvaluechanged', readAnother);
+            // characteristics[1].addEventListener('characteristicvaluechanged', function (event) {
+            //     console.log(`2: ${event.target.value}`);
+            // });
+
+            characteristics[0].startNotifications();
+            characteristics[1].startNotifications();
+
+            return characteristics[0].readValue();
+            return characteristics[1].readValue();
+
+            console.log("startNotifications");
+        }
+    }
+
+    function keyFromServer(data) {
+        let man = document.getElementById("man");
+        let replay = document.getElementById("replay");
+        if (data === 68) {
+            leftness = leftness + 10;
+            man.style.left = leftness + "px";
+            console.log(man.offsetLeft)
+        }
+        if (data === 65) {
+            leftness = leftness - 10;
+            man.style.left = leftness + "px";
+            console.log(man.offsetLeft)
+        }
+        if (man.offsetLeft > 921) {
+            //man.offsetLeft > 0.60 * window.innerWidth
+            alert("Player 2 wins!")
+            replay.style.display = "block";
+            winCounterSpace = winCounterSpace + 1;
+            document.getElementById("spacewins").innerHTML = `<strong> Player 2 wins: </strong> ${winCounterSpace}`
+
+        } else if (man.offsetLeft < 307) {
+            //man.offsetLeft < 0.215 * window.innerWidth
+            alert("Player 1 wins!")
+            replay.style.display = "block";
+            winCounterOther = winCounterOther + 1;
+            document.getElementById("otherwins").innerHTML = `<strong> Player 1 wins: </strong> ${winCounterOther}`
+        }
+    }
+
+    function dealWithKeyboard(input) {
+        socket.emit('otherevent', input.keyCode);
+    }
+
+    document.getElementById("spacewins").innerHTML = `<strong>Player 2 wins: </strong> ${winCounterSpace}`
+    document.getElementById("otherwins").innerHTML = `<strong>Player 1 wins: </strong> ${winCounterOther}`
+
+
+    function replay() {
+        document.getElementById("man").style.left = 0;
+        leftness = 0;
+    }
+
+
+
+    function readData(event, error) {
+        if (error) {
+            console.log('error: ', error);
+            return;
+        }
+        let sensorVal = event.target.value.getUint8(0);
+
+        dataDiv.innerHTML = 'Player 1 Pressed: ' + sensorVal;
+
+        console.log("Value 1:" + sensorVal);
+
+        if (sensorVal < 17) {
+            document.getElementById("heartSmall_l").style.opacity = "0";
+            document.getElementById("heartMid_l").style.opacity = "0";
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (sensorVal == 17) {
+            document.getElementById("heartSmall_l").style.opacity = "1";
+        } else if (sensorVal < 34) {
+            document.getElementById("heartMid_l").style.opacity = "0";
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (sensorVal == 34) {
+            document.getElementById("heartMid_l").style.opacity = "1";
+        } else if (sensorVal < 51) {
+            document.getElementById("heartBig_l").style.opacity = "0";
+        } else if (sensorVal == 51) {
+            document.getElementById("heartBig_l").style.opacity = "1";
+        }
+        socket.emit('player1graphics', sensorVal);
+    }
+
+    function readAnother(event, error) {
+        if (error) {
+            console.log('error: ', error);
+            return;
+        }
+
+        let sensorVal2 = event.target.value.getUint8(0);
+
+        dataDiv2.innerHTML = 'Player 2 Pressed: ' + sensorVal2;
+
+        console.log("Value 2:" + sensorVal2);
+
+        if (sensorVal2 < 17) {
+            document.getElementById("heartSmall_r").style.opacity = "0";
+            document.getElementById("heartMid_r").style.opacity = "0";
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (sensorVal2 == 17) {
+            document.getElementById("heartSmall_r").style.opacity = "1";
+        } else if (sensorVal2 < 34) {
+            document.getElementById("heartMid_r").style.opacity = "0";
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (sensorVal2 == 34) {
+            document.getElementById("heartMid_r").style.opacity = "1";
+        } else if (sensorVal2 < 51) {
+            document.getElementById("heartBig_r").style.opacity = "0";
+        } else if (sensorVal2 == 51) {
+            document.getElementById("heartBig_r").style.opacity = "1";
+        }
+        socket.emit('player2graphics', sensorVal2);
+    }
+
+    var slide_index = 1;
+    displaySlides(slide_index);
+
+    function nextSlide(n) {
+        displaySlides(slide_index += n);
+    }
+    function currentSlide(n) {
+        displaySlides(slide_index = n);
+    }
+
+    function displaySlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("wrapper");
+        if (n > slides.length) { slide_index = 1 }
+        if (n < 1) { slide_index = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        slides[slide_index - 1].style.display = "block";
+        console.log(slide_index);
+    }
+
+    // var pix = document.getElementsByClassName("pixel");
+
+    // for (var i = 0; i < 1000; i++) {
+    //     pix[i].style.animationDelay = Math.ceil(Math.random() * 5000) + "ms";
+    // }
+
+    window.addEventListener('DOMContentLoaded', setup);
+
+</script>
+
+</html>
